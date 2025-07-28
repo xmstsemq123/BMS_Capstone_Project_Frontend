@@ -4,7 +4,7 @@ const WEBSOCKET_PROTOCOL = "wss"
 const HOST = "bms-capstone-project-backend.onrender.com"
 const WEBSITE_PORT = ""
 const API_PORT = ""
-const WEBSITE_URL = `${HTTP_PROTOCOL}://${HOST}${WEBSITE_PORT}`
+const WEBSITE_URL = `${HTTP_PROTOCOL}://bms-capstone-project-frontend.vercel.app${WEBSITE_PORT}`
 const HTTP_API_URL = `${HTTP_PROTOCOL}://${HOST}${API_PORT}`
 const WS_API_URL = `${WEBSOCKET_PROTOCOL}://${HOST}${API_PORT}`
 //------ Global Route ------//
