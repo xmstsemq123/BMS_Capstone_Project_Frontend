@@ -24,10 +24,12 @@ import NotificationDataFetch from './components/DataFetch/NotificationDataFetch.
 import Profile from './components/Profile/Profile.jsx'
 import Logout from './components/Logout/Logout.jsx'
 import './Public/scrollbar.css'
+import DesktopNotification from './components/DesktopNotification/DesktopNotification.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
+      <DesktopNotification />
       <GlobalDataFetch />
       <HomeDataFetch />
       <AnalyticsDataFetch />

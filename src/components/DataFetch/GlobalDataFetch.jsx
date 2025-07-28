@@ -10,6 +10,7 @@ import { updateCurrentTime } from "../../features/NowTime/NowTimeSlice";
 
 export default function GlobalDataFetch(){
     const dispatch = useDispatch()
+    const DesktopNotificationPermission = useSelector(state => state.desktopNotification.permission)
     //------ setting error info function ------//
     const setErrorMsg = (data) => {
         dispatch(setIs_Error(true))
@@ -50,7 +51,7 @@ export default function GlobalDataFetch(){
         }
         ws.current.onmessage = (event) =>  {
             let data = JSON.parse(event.data)
-            ProcessSubscribeChangeData(data, dispatch)
+            ProcessSubscribeChangeData(data, dispatch, DesktopNotificationPermission)
         }
         ws.current.onerror = (err) => {
             setErrorMsg("最新資料傳遞時發生錯誤，請檢察伺服器！")

@@ -12,7 +12,7 @@ import { insertFrontUnreadMsg } from "../../../features/Notification/Notificatio
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
-export default function ProcessSubscribeChangeData(rawData, dispatch) {
+export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNotificationPermission) {
     const setErrorMsg = (data) => {
         dispatch(setIs_Error(true))
         dispatch(setErrMsg(data))
@@ -29,7 +29,7 @@ export default function ProcessSubscribeChangeData(rawData, dispatch) {
             let collection_name = rawData["collection_name"]
             let rawCellsData = rawData["rawData"]
             let supportedCollection = ["voltage", "current", "temperature", "SOC", "SOH"]
-            if(!supportedCollection.includes(collection_name)) return
+            if (!supportedCollection.includes(collection_name)) return
             dispatch(setCollectionCellsData({
                 'collection_name': collection_name,
                 'data': rawCellsData
@@ -111,22 +111,28 @@ export default function ProcessSubscribeChangeData(rawData, dispatch) {
             })
         })
         dispatch(insertFrontOneHistoryAnnomalyData(dataArray))
+        if (DesktopNotificationPermission === 'granted') {
+            new Notification('🔔 [BMS Monitor] 你有一則新通知', {
+                body: '有新警報，請盡速查看詳情！',
+                icon: ''  // 可換成你自己的圖片
+            });
+        }
     }
 
-    function ClassCode3_Threshold_Data_Process(rawdata){
-        for(let typeName in rawdata["data"]){
-            for(let level in rawdata[typeName]){
+    function ClassCode3_Threshold_Data_Process(rawdata) {
+        for (let typeName in rawdata["data"]) {
+            for (let level in rawdata[typeName]) {
                 let bound = rawdata[typeName][level]
                 console.log(rawdata)
                 console.log(bound)
                 bound.forEach((value, index) => {
-                    if(value >= 9999) setServerDetailBounds({
+                    if (value >= 9999) setServerDetailBounds({
                         'type': typeName,
                         'level': level,
                         'index': index,
                         'value': Infinity
                     })
-                    else if(value <= -9999) setServerDetailBounds({
+                    else if (value <= -9999) setServerDetailBounds({
                         'type': typeName,
                         'level': level,
                         'index': index,
@@ -143,7 +149,7 @@ export default function ProcessSubscribeChangeData(rawData, dispatch) {
         }
     }
 
-    function ClassCode4_Notification_Data_Process(rawdata){
+    function ClassCode4_Notification_Data_Process(rawdata) {
         let data = rawdata["data"]
         dispatch(insertFrontUnreadMsg(data))
     }

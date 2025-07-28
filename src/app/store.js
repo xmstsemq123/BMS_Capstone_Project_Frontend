@@ -13,6 +13,7 @@ import UserPasswordSlice from '../features/UserPasswordSetting/UserPasswordSetti
 import FilesSlice from '../features/Files/FilesSlice'
 import NowTimeSlice from '../features/NowTime/NowTimeSlice'
 import NotificationSlice from '../features/Notification/NotificationSlice'
+import DesktopNotificationSlice from '../features/DesktopNotification/DesktopNotification'
 
 export const store = configureStore({
     reducer: {
@@ -29,6 +30,7 @@ export const store = configureStore({
         error: ErrorSliceReducer,
         isRendered: isRenderedSlice,
         nowtime: NowTimeSlice,
-        notification: NotificationSlice
+        notification: NotificationSlice,
+        desktopNotification: DesktopNotificationSlice
     },
 })
