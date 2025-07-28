@@ -80,7 +80,7 @@ export default function AnalyticsDataFetch() {
     //------ Other blocks data fetch ------//
     useEffect(() => {
         if (is_MainPage_Rendered) return
-        fetch(GET_ANALYTICS_DATA + "?Charge=true&DischargeRecord=true")
+        fetch(GET_ANALYTICS_DATA)
             .then(res => res.json())
             .then(data => {
                 data = JSON.parse(data)
