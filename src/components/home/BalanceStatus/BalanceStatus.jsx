@@ -30,7 +30,7 @@ export default function BalanceStatus() {
     return (
         <div className="w-full">
             {/* <div className="h-[4px] w-full bg-gray-600 rounded-full mb-5" /> */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-row gap-4">
                 <ItemCard label="元件編號" index={chargingIndex} type="charging" />
                 <ItemCard label="元件編號" index={dischargingIndex} type="discharging" />
             </div>
