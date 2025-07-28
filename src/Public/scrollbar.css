@@ -1,0 +1,23 @@
+/* 整體 scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* 垂直滾軸寬度 */
+  height: 8px; /* 水平滾軸高度 */
+}
+
+/* 軌道背景 */
+::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-radius: 4px;
+}
+
+/* 滑塊本體 */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+  border: 1px solid #555;
+}
+
+/* 滑塊 hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
