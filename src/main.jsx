@@ -40,10 +40,10 @@ createRoot(document.getElementById('root')).render(
       <FilesDataFetch />
       {/* Nav Bar */}
       <Router>
-        <Error className="h-full w-full" />
         <CheckUser />
         <div className="min-h-screen bg-[#161325] text-white font-sans">
           <Nav />
+          <Error className="h-full w-full" />
           <main className="p-6">
             <Routes>
               <Route path="/" element={<Home />} />
