@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, setUser } from "../../features/user/userSlice";
 import { useNavigate } from 'react-router-dom';
+import { POST_CHECKUSER } from "../../Public/APIUrl";
 
 export default function CheckUser(){
     const userSlice = useSelector((state) => state.user)
@@ -12,7 +13,7 @@ export default function CheckUser(){
         const username = localStorage.getItem('username')
         const userID = localStorage.getItem('userID')
         const access_token = localStorage.getItem('access_token')
-        fetch("http://127.0.0.1:8000/protected", {
+        fetch(POST_CHECKUSER, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${access_token}`

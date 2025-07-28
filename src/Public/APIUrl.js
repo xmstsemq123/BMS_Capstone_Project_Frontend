@@ -1,9 +1,9 @@
 //------ Global URL ------//
-const HTTP_PROTOCOL = "http"
-const WEBSOCKET_PROTOCOL = "ws"
-const HOST = "127.0.0.1"
+const HTTP_PROTOCOL = "https"
+const WEBSOCKET_PROTOCOL = "wss"
+const HOST = "bms-capstone-project-backend.onrender.com"
 const WEBSITE_PORT = ":5173"
-const API_PORT = ":8000"
+const API_PORT = ""
 const WEBSITE_URL = `${HTTP_PROTOCOL}://localhost${WEBSITE_PORT}`
 const HTTP_API_URL = `${HTTP_PROTOCOL}://${HOST}${API_PORT}`
 const WS_API_URL = `${WEBSOCKET_PROTOCOL}://${HOST}${API_PORT}`
@@ -30,6 +30,8 @@ const POST_LOGIN = HTTP_API_URL + "/login"
 const GET_NOTIFICATION_DATA = HTTP_API_URL + "/get/notification"
 const PUT_TURN_READ = HTTP_API_URL + "/put/TurnRead"
 const POST_LOAD_MORE_NOTIFICATION_DATA = HTTP_API_URL + "/post/notification/loadmore"
+//------ Check User ------//
+const POST_CHECKUSER = HTTP_API_URL + "/protected"
 export { 
     WEBSITE_URL, HTTP_API_URL, WS_API_URL, 
     WS_SUBSCRIBE_CHANGE, GET_THRESHOLD,
@@ -39,5 +41,6 @@ export {
     POST_DATA_DOWNLOAD,
     PUT_THRESHOLD_DATA, PUT_CHANGE_PASSWORD, 
     POST_LOGIN,
-    GET_NOTIFICATION_DATA, PUT_TURN_READ, POST_LOAD_MORE_NOTIFICATION_DATA
+    GET_NOTIFICATION_DATA, PUT_TURN_READ, POST_LOAD_MORE_NOTIFICATION_DATA,
+    POST_CHECKUSER
 }
