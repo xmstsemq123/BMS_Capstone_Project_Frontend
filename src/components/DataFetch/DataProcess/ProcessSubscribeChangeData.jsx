@@ -1,6 +1,6 @@
 import { setVoltage, setCurrent, setTemperature, setSOC, setSOH } from "../../../features/RouteData/HomeData";
 import { setIs_Error, setErrMsg } from "../../../features/Error/ErrorSlice";
-import { setCellChargeInfo } from "../../../features/RouteData/AnalyticsData";
+import { addData, setCellChargeInfo, setSystemCurrentGraphData } from "../../../features/RouteData/AnalyticsData";
 import { insertFrontOneHistoryAnnomalyData, setIs_newAnnomalyData, setNewAnnomalyData } from "../../../features/RouteData/AnnomalyData";
 import { setCollectionCellsData } from "../../../features/CellAllData/CellAllDataSlice";
 import { setServerDetailBounds } from "../../../features/Threshold/ThresholdSlice";
@@ -12,17 +12,65 @@ import { insertFrontUnreadMsg } from "../../../features/Notification/Notificatio
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
-export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNotificationPermission) {
+const CollectionNameToSliceNameList = {
+    "SOC": "SOC",
+    "SOH": "SOH",
+    "voltage": "Voltage",
+    "SystemCurrent": "SystemCurrent",
+    "temperature": "Temperature"
+}
+export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNotificationPermission, analyticsData) {
     const setErrorMsg = (data) => {
         dispatch(setIs_Error(true))
         dispatch(setErrMsg(data))
     }
+    console.log(rawData)
     let DataClassCode = rawData["class_code"]
     let DataContentType = rawData["content_type"]
     if (typeof (DataClassCode) != "string" || typeof (DataContentType) != "string") {
         setErrorMsg("伺服器回傳資料格式不正確！")
         return
     }
+    
+    if(DataClassCode == '0'){
+        let collection_name = rawData["collection_name"]
+        let slice_name = CollectionNameToSliceNameList[collection_name]
+        let timestamp = rawData["timestamp"]
+        if(collection_name == "SystemCurrent"){
+            let dataValue = rawData["data"]
+            if(dataValue){
+                dispatch(addData({
+                    "dataType": "SystemCurrent",
+                    "data": {
+                        "time": {"$date": timestamp},
+                        "value": dataValue
+                    }
+                }))
+            }
+        }else{
+            if(analyticsData.graphInfo[slice_name].GraphScale == "overall"){
+                let dataValue = rawData["data"]
+                dispatch(addData({
+                    "dataType": slice_name,
+                    "data": {
+                        "time": {"$date": timestamp},
+                        "value": dataValue
+                    }
+                }))
+            }else{
+                let chosencell = analyticsData.graphInfo[slice_name].GraphScale
+                let dataValue = rawData["rawData"][`cell_${chosencell}`]
+                dispatch(addData({
+                    "dataType": slice_name,
+                    "data": {
+                        "time": {"$date": timestamp},
+                        "value": dataValue
+                    }
+                }))
+            }
+        }
+    }
+
     switch (DataClassCode) {
         case '0': {
             ClassCode0_HomePage_Data_Process(rawData)

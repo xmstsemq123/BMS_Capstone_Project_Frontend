@@ -50,7 +50,7 @@ const AnalyticsData = createSlice({
             state.graphInfo.Voltage.TimeScale = actions.payload.TimeScale
         },
         setSystemCurrentGraphInfo: (state, actions) => {
-            state.graphInfo.Current.TimeScale = actions.payload.TimeScale
+            state.graphInfo.SystemCurrent.TimeScale = actions.payload.TimeScale
         },
         setSOHGraphInfo: (state, actions) => {
             state.graphInfo.SOH.TimeScale = actions.payload.TimeScale
@@ -67,14 +67,25 @@ const AnalyticsData = createSlice({
         },
         setVoltageGraphData: (state, actions) => {
             state.graphData.Voltage = actions.payload
+            console.log(actions.payload)
         },
         setSystemCurrentGraphData: (state, actions) => {
-            state.graphData.Current = actions.payload
+            state.graphData.SystemCurrent = actions.payload
         },
         // setting cell charge info
         setCellChargeInfo: (state, actions) => {
             state.cellChargeInfo.chargingIndex = actions.payload.chargingIndex
             state.cellChargeInfo.dischargingIndex = actions.payload.dischargingIndex
+        },
+        // push back new graph data
+        // payload.actions = {
+        //     dataType: str(),
+        //     data: number()
+        // }
+        addData: (state, actions) => {
+            let dataType = actions.payload.dataType
+            let data = actions.payload.data
+            state.graphData[dataType].push(data)
         }
     }
 })
@@ -82,6 +93,7 @@ const AnalyticsData = createSlice({
 export const { setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setSystemCurrentGraphInfo,
     setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData, 
     setSOHGraphInfo, setSOHGraphData,
-    setCellChargeInfo
+    setCellChargeInfo,
+    addData
  } = AnalyticsData.actions
 export default AnalyticsData.reducer

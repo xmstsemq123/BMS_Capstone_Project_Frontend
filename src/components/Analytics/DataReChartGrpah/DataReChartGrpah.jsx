@@ -6,10 +6,15 @@ import { format } from 'date-fns';
 import { Box, Slider, Typography } from '@mui/material';
 
 function convertMongoTimeData(input) {
-  return input.map(d => ({
-    time: new Date(d.time.$date).getTime(),
-    value: d.value,
-  }));
+  try{
+      return input.map(d => ({
+      time: new Date(d.time.$date).getTime(),
+      value: d.value,
+    }));
+  }catch(e){
+    console.log(input)
+    return Array(0)
+  }
 }
 
 export default function VoltageHistoryFigure({ data }) {

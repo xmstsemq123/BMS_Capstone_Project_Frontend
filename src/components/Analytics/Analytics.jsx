@@ -67,7 +67,7 @@ export default function Analytics() {
     const SOHData = graphData.SOH
     const TempData = graphData.Temperature
     const VolData = graphData.Voltage
-    const CurrentData = graphData.Current
+    const SystemCurrentData = graphData.SystemCurrent
     //------ Array for quick layout ------//
     const chargeCompnents = [
         {
@@ -83,7 +83,7 @@ export default function Analytics() {
             title: '歷史系統電流紀錄',
             timeScaleValue: SystemCurrentTimeScale,
             timeScaleFunction: setSystemCurrentTimeScale,
-            data: CurrentData
+            data: SystemCurrentData
         },
         {
             is_cell: true,

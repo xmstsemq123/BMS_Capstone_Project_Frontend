@@ -51,6 +51,7 @@ export default function AnalyticsDataFetch() {
                 SystemCurrent: CurrentTimeScale
             }
         }
+        console.log(payload)
         fetch(POST_GRATH_DATA, {
             method: "POST",
             headers: {
@@ -62,6 +63,7 @@ export default function AnalyticsDataFetch() {
             .then(data => {
                 data = JSON.parse(data)
                 if (data['status'] != 'Success') {
+                    console.log(data)
                     dispatch(setIs_Error(true))
                     dispatch(setErrMsg('抓取Graph資料時發生錯誤！'))
                     return
@@ -69,7 +71,7 @@ export default function AnalyticsDataFetch() {
                 setSOCData(data["SOC"])
                 setTempData(data["temperature"])
                 setVolData(data["voltage"])
-                setSystemCurrentData(data["current"])
+                setSystemCurrentData(data["SystemCurrent"])
                 setSOHData(data["SOH"])
             })
             .catch(err => {
