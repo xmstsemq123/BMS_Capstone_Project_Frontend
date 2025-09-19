@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setCurrentGraphData,
+    setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData,
     setCellChargeInfo,
     setSOHGraphData
 } from '../../features/RouteData/AnalyticsData'
@@ -24,13 +24,13 @@ export default function AnalyticsDataFetch() {
     const SOHTimeScale = graphInfo.SOH.TimeScale
     const TempTimeScale = graphInfo.Temperature.TimeScale
     const VolTimeScale = graphInfo.Voltage.TimeScale
-    const CurrentTimeScale = graphInfo.Current.TimeScale
+    const CurrentTimeScale = graphInfo.SystemCurrent.TimeScale
     //------ setting graph data functions ------//
     const setSOCData = (data) => dispatch(setSOCGraphData(data))
     const setSOHData = (data) => dispatch(setSOHGraphData(data))
     const setTempData = (data) => dispatch(setTemperatureGraphData(data))
     const setVolData = (data) => dispatch(setVoltageGraphData(data))
-    const setCurrentData = (data) => dispatch(setCurrentGraphData(data))
+    const setSystemCurrentData = (data) => dispatch(setSystemCurrentGraphData(data))
     //------ srting cell charge info functions ------//
     const setChargingIndexInfo = (data) => dispatch(setCellChargeInfo(data))
     //------ Graph data fetch ------//
@@ -41,14 +41,14 @@ export default function AnalyticsDataFetch() {
                 SOH: selectedCellSOH,
                 temperature: selectedTempCell,
                 voltage: selectedVolCell,
-                current: "OneValue"
+                SystemCurrent: "OneValue"
             },
             Time_Scale: {
                 SOC: SOCTimeScale,
                 SOH: SOHTimeScale,
                 temperature: TempTimeScale,
                 voltage: VolTimeScale,
-                current: CurrentTimeScale
+                SystemCurrent: CurrentTimeScale
             }
         }
         fetch(POST_GRATH_DATA, {
@@ -69,7 +69,7 @@ export default function AnalyticsDataFetch() {
                 setSOCData(data["SOC"])
                 setTempData(data["temperature"])
                 setVolData(data["voltage"])
-                setCurrentData(data["current"])
+                setSystemCurrentData(data["current"])
                 setSOHData(data["SOH"])
             })
             .catch(err => {

@@ -3,7 +3,7 @@ import CellActivityBlock from './CellActivityBlock/CellActivityBlock'
 import DataReChartGraph from './DataReChartGrpah/DataReChartGrpah'
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setCurrentGraphInfo,
+    setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setSystemCurrentGraphInfo,
     setSOHGraphInfo
 } from '../../features/RouteData/AnalyticsData'
 import { FaBatteryFull, FaBatteryQuarter } from 'react-icons/fa';
@@ -49,7 +49,7 @@ export default function Analytics() {
     const SOHTimeScale = graphInfo.SOH.TimeScale
     const TempTimeScale = graphInfo.Temperature.TimeScale
     const VolTimeScale = graphInfo.Voltage.TimeScale
-    const CurrentTimeScale = graphInfo.Current.TimeScale
+    const SystemCurrentTimeScale = graphInfo.SystemCurrent.TimeScale
     //------ graph info functions ------//
     //--- graph scale ---//
     const setSelectedCellSOC = (data) => dispatch(setSOCGraphInfo({ GraphScale: data, TimeScale: SOCTimeScale }))
@@ -61,7 +61,7 @@ export default function Analytics() {
     const setSOHTimeScale = (data) => dispatch(setSOHGraphInfo({ GraphScale: selectedCellSOH, TimeScale: data }))
     const setTempTimeScale = (data) => dispatch(setTemperatureGraphInfo({ GraphScale: selectedTempCell, TimeScale: data }))
     const setVolTimeScale = (data) => dispatch(setVoltageGraphInfo({ GraphScale: selectedVolCell, TimeScale: data }))
-    const setCurrentTimeScale = (data) => dispatch(setCurrentGraphInfo({ TimeScale: data }))
+    const setSystemCurrentTimeScale = (data) => dispatch(setSystemCurrentGraphInfo({ TimeScale: data }))
     //------ graph data ------//
     const SOCData = graphData.SOC
     const SOHData = graphData.SOH
@@ -70,6 +70,21 @@ export default function Analytics() {
     const CurrentData = graphData.Current
     //------ Array for quick layout ------//
     const chargeCompnents = [
+        {
+            is_cell: true,
+            title: '歷史電壓紀錄',
+            selectedCellValue: selectedVolCell,
+            selectedCellFunction: setSelectedVolCell,
+            timeScaleValue: VolTimeScale,
+            timeScaleFunction: setVolTimeScale,
+            data: VolData
+        }, {
+            is_cell: false,
+            title: '歷史系統電流紀錄',
+            timeScaleValue: SystemCurrentTimeScale,
+            timeScaleFunction: setSystemCurrentTimeScale,
+            data: CurrentData
+        },
         {
             is_cell: true,
             title: '歷史電量紀錄',
@@ -94,21 +109,7 @@ export default function Analytics() {
             timeScaleValue: TempTimeScale,
             timeScaleFunction: setTempTimeScale,
             data: TempData
-        }, {
-            is_cell: true,
-            title: '歷史電壓紀錄',
-            selectedCellValue: selectedVolCell,
-            selectedCellFunction: setSelectedVolCell,
-            timeScaleValue: VolTimeScale,
-            timeScaleFunction: setVolTimeScale,
-            data: VolData
-        }, {
-            is_cell: false,
-            title: '歷史電流紀錄',
-            timeScaleValue: CurrentTimeScale,
-            timeScaleFunction: setCurrentTimeScale,
-            data: CurrentData
-        },
+        }, 
     ]
     return (
         <div className="flex flex-col gap-5 px-5 select-none">

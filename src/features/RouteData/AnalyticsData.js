@@ -19,7 +19,7 @@ const AnalyticsData = createSlice({
                 GraphScale: 'overall',
                 TimeScale: '0'
             },
-            Current: {
+            SystemCurrent: {
                 TimeScale: '0'
             }
         },
@@ -27,7 +27,7 @@ const AnalyticsData = createSlice({
             SOC: [],
             Temperature: [],
             Voltage: [],
-            Current: [],
+            SystemCurrent: [],
             SOH: []
         },
         cellChargeInfo: {
@@ -49,7 +49,7 @@ const AnalyticsData = createSlice({
             state.graphInfo.Voltage.GraphScale = actions.payload.GraphScale
             state.graphInfo.Voltage.TimeScale = actions.payload.TimeScale
         },
-        setCurrentGraphInfo: (state, actions) => {
+        setSystemCurrentGraphInfo: (state, actions) => {
             state.graphInfo.Current.TimeScale = actions.payload.TimeScale
         },
         setSOHGraphInfo: (state, actions) => {
@@ -68,7 +68,7 @@ const AnalyticsData = createSlice({
         setVoltageGraphData: (state, actions) => {
             state.graphData.Voltage = actions.payload
         },
-        setCurrentGraphData: (state, actions) => {
+        setSystemCurrentGraphData: (state, actions) => {
             state.graphData.Current = actions.payload
         },
         // setting cell charge info
@@ -79,8 +79,8 @@ const AnalyticsData = createSlice({
     }
 })
 
-export const { setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setCurrentGraphInfo,
-    setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setCurrentGraphData, 
+export const { setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setSystemCurrentGraphInfo,
+    setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData, 
     setSOHGraphInfo, setSOHGraphData,
     setCellChargeInfo
  } = AnalyticsData.actions
