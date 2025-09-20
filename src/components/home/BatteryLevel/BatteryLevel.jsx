@@ -6,7 +6,7 @@ export default function BatteryLevel({ percentage }) {
                      'bg-red-500';
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center p-8">
         <div className="relative w-32 h-13 bg-gray-700 rounded-md overflow-hidden mt-3">
             <div className="absolute -right-2 top-3 w-2 h-9 bg-gray-500 rounded-sm"></div>
             <div

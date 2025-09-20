@@ -7,6 +7,7 @@ import BatteryLevel from './BatteryLevel/BatteryLevel';
 import BatteryAbnormalState from './BatteryAbnormalState/BatteryAbnormalState';
 import CellActivityBlock from './CellActivityBlock/CellActivityBlock';
 import BalanceStatus from './BalanceStatus/BalanceStatus';
+import RideStatus from './RideStatus/RideStatus';
 
 const Block = ({ title, children, className }) => {
   return (
@@ -27,6 +28,9 @@ export default function Home() {
     <div className="p-6 bg-[#1f1b2e] select-none">
       <h1 className="text-2xl font-bold text-white mb-6">電池模組狀態總覽</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <Block title="電車狀態">
+          <RideStatus />
+        </Block>
         <Block title="電量">
           <BatteryLevel percentage={batteryPercentage} />
         </Block>

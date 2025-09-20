@@ -7,7 +7,7 @@ import {
     setBalanceCurrentGraphData
 } from '../../features/RouteData/AnalyticsData'
 import { setIs_Error, setErrMsg } from "../../features/Error/ErrorSlice";
-import { POST_GRATH_DATA, GET_ANALYTICS_DATA, POST_BALANCECURRENT_DATA } from "../../Public/APIUrl";
+import { POST_GRATH_DATA, POST_BALANCECURRENT_DATA } from "../../Public/APIUrl";
 
 export default function AnalyticsDataFetch() {
     const dispatch = useDispatch()
@@ -101,7 +101,6 @@ export default function AnalyticsDataFetch() {
                     dispatch(setErrMsg('抓取Graph資料時發生錯誤！'))
                     return
                 }
-                console.log(data)
                 setBalanceCurrentData(data["data"])
             })
             .catch(err => {
@@ -110,27 +109,4 @@ export default function AnalyticsDataFetch() {
                 dispatch(setErrMsg("err: 與伺服器連線時發生錯誤"))
             })
     }, [BalanceCurrentTimeScale])
-    //------ Other blocks data fetch ------//
-    useEffect(() => {
-        if (is_MainPage_Rendered) return
-        fetch(GET_ANALYTICS_DATA)
-            .then(res => res.json())
-            .then(data => {
-                data = JSON.parse(data)
-                if (data['status'] != "Success") {
-                    dispatch(setIs_Error(true))
-                    dispatch(setErrMsg('抓取Other blocks資料時發生錯誤！'))
-                    return
-                }
-                let ChargingData = data["Charge"]
-                setChargingIndexInfo({
-                    chargingIndex: ChargingData["chargingIndex"],
-                    dischargingIndex: ChargingData["dischargingIndex"]
-                })
-            })
-            .catch(err => {
-                dispatch(setIs_Error(true))
-                dispatch(setErrMsg("err: 與伺服器連線時發生錯誤"))
-            })
-    })
 }

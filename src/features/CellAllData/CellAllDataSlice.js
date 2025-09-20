@@ -48,10 +48,10 @@ const CellAllDataSlice = createSlice({
         // }
         setCollectionCellsData: (state, actions) => {
             let collection_name = actions.payload["collection_name"]
-            if(!["voltage", "temperature", "SOC", "SOH", "current"].includes(collection_name))
+            if(!["voltage", "temperature", "SOC", "SOH", "SystemCurrent"].includes(collection_name))
                 throw TypeError("collection_name in parameter in setCollectionCellsData() must be one of 'voltage'/'temperature'/'current'/'SOC'/'SOH' !")
             let data = actions.payload["data"]
-            if(collection_name == "current"){
+            if(collection_name == "SystemCurrent"){
                 state.WholeCurrent = data
                 return
             }

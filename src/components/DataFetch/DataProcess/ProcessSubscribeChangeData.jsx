@@ -1,4 +1,4 @@
-import { setVoltage, setCurrent, setTemperature, setSOC, setSOH } from "../../../features/RouteData/HomeData";
+import { setVoltage, setCurrent, setTemperature, setSOC, setSOH, setBalanceCurrent, setBalanceStatus, setSystemCurrent, setRelayStatus } from "../../../features/RouteData/HomeData";
 import { setIs_Error, setErrMsg } from "../../../features/Error/ErrorSlice";
 import { addData, setCellChargeInfo, setSystemCurrentGraphData } from "../../../features/RouteData/AnalyticsData";
 import { insertFrontOneHistoryAnnomalyData, setIs_newAnnomalyData, setNewAnnomalyData } from "../../../features/RouteData/AnnomalyData";
@@ -24,14 +24,14 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
         dispatch(setIs_Error(true))
         dispatch(setErrMsg(data))
     }
-    console.log(rawData)
     let DataClassCode = rawData["class_code"]
     let DataContentType = rawData["content_type"]
     if (typeof (DataClassCode) != "string" || typeof (DataContentType) != "string") {
         setErrorMsg("伺服器回傳資料格式不正確！")
         return
     }
-    if(rawData["collection_name"] == "BalanceCurrent"){
+    console.log(rawData)
+    if (rawData["collection_name"] == "BalanceCurrent") {
         let time = rawData["timestamp"]
         let celldata = rawData["rawData"]
         let BCData = Object.fromEntries(
@@ -46,40 +46,41 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
             "dataType": "BalanceCurrent",
             "data": BCData
         }))
+        dispatch(setBalanceCurrent(celldata))
     }
-    
-    if(DataClassCode == '0'){
+
+    if (DataClassCode == '0') {
         let collection_name = rawData["collection_name"]
         let slice_name = CollectionNameToSliceNameList[collection_name]
         let timestamp = rawData["timestamp"]
-        if(collection_name == "SystemCurrent"){
+        if (collection_name == "SystemCurrent") {
             let dataValue = rawData["data"]
-            if(dataValue){
+            if (dataValue) {
                 dispatch(addData({
                     "dataType": "SystemCurrent",
                     "data": {
-                        "time": {"$date": timestamp},
+                        "time": { "$date": timestamp },
                         "value": dataValue
                     }
                 }))
             }
-        }else{
-            if(analyticsData.graphInfo[slice_name].GraphScale == "overall"){
+        } else {
+            if (analyticsData.graphInfo[slice_name].GraphScale == "overall") {
                 let dataValue = rawData["data"]
                 dispatch(addData({
                     "dataType": slice_name,
                     "data": {
-                        "time": {"$date": timestamp},
+                        "time": { "$date": timestamp },
                         "value": dataValue
                     }
                 }))
-            }else{
+            } else {
                 let chosencell = analyticsData.graphInfo[slice_name].GraphScale
                 let dataValue = rawData["rawData"][`cell_${chosencell}`]
                 dispatch(addData({
                     "dataType": slice_name,
                     "data": {
-                        "time": {"$date": timestamp},
+                        "time": { "$date": timestamp },
                         "value": dataValue
                     }
                 }))
@@ -92,7 +93,7 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
             ClassCode0_HomePage_Data_Process(rawData)
             let collection_name = rawData["collection_name"]
             let rawCellsData = rawData["rawData"]
-            let supportedCollection = ["voltage", "current", "temperature", "SOC", "SOH"]
+            let supportedCollection = ["voltage", "SystemCurrent", "temperature", "SOC", "SOH"]
             if (!supportedCollection.includes(collection_name)) return
             dispatch(setCollectionCellsData({
                 'collection_name': collection_name,
@@ -126,8 +127,9 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
                 dispatch(setVoltage(new_value))
                 break
             }
-            case 'current': {
+            case 'SystemCurrent': {
                 dispatch(setCurrent(new_value))
+                dispatch(setSystemCurrent(new_value))
                 break
             }
             case 'temperature': {
@@ -146,12 +148,32 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
     }
 
     function ClassCode1_Analytics_Data_Process(data) {
-        let chargingIndex = data["data"]["chargingIndex"]
-        let dischargingIndex = data["data"]["dischargingIndex"]
-        dispatch(setCellChargeInfo({
-            'chargingIndex': chargingIndex,
-            'dischargingIndex': dischargingIndex
-        }))
+        let collection_name = data["collection_name"]
+        if (collection_name == "balance") {
+            let cellsData = data["rawData"]
+            let is_c = false, is_dc = false, Cell = 0
+            for (let i = 0; i < 16; i++) {
+                let status = cellsData[`cell_${i}`]
+                if (status == "c") {
+                    is_c = true
+                    Cell = i
+                    break
+                }
+                if (status == "dc") {
+                    is_dc = true
+                    Cell = i
+                    break
+                }
+            }
+            dispatch(setBalanceStatus({
+                "is_c": is_c,
+                "is_dc": is_dc,
+                "Cell": Cell
+            }))
+        }else if(collection_name == "relay"){
+            let RelayStatus = data["rawData"]
+            dispatch(setRelayStatus(RelayStatus))
+        }
     }
 
     function ClassCode2_Annomaly_Data_Process(rowdata) {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setAllHomeData } from "../../features/RouteData/HomeData";
-import { GET_NEWEST_MEAN_DATA, GET_CELL_ALL_DATA } from "../../Public/APIUrl";
+import { setAllHomeData, setBalanceCurrent, setBalanceStatus, setRelayStatus, setSystemCurrent } from "../../features/RouteData/HomeData";
+import { GET_NEWEST_MEAN_DATA, GET_CELL_ALL_DATA, GET_BALANCE_AND_RELAY } from "../../Public/APIUrl";
 import { setIs_Error, setErrMsg } from "../../features/Error/ErrorSlice";
 import { setCellData, setWholeCurrentValue } from "../../features/CellAllData/CellAllDataSlice";
 
@@ -68,6 +68,19 @@ export default function HomeDataFetch() {
         })
         .catch(err => {
             setErrorMsg("err: 與伺服器連線時發生錯誤")
+        })
+    })
+    // get relay and balance data
+    useEffect(() => {
+        if(is_MainPage_Rendered) return
+        fetch(GET_BALANCE_AND_RELAY)
+        .then(res => res.json())
+        .then(data => {
+            data = JSON.parse(data)
+            dispatch(setRelayStatus(data["relay"]))
+            dispatch(setBalanceStatus(data["balance"]))
+            dispatch(setBalanceCurrent(data["BalanceCurrent"]))
+            dispatch(setSystemCurrent(data["SystemCurrent"]))
         })
     })
 }

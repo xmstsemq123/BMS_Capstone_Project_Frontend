@@ -10,16 +10,17 @@ import { setDownloadErrorMsg, setEndTime, setIS_ClickButton, setIs_csv, setIs_Do
 import Spinner from '../../Public/Spinner';
 
 const collectionList = [
-    "voltage", "temperature", "relay", "current", "balance", "annomaly", "SOH", "SOC"
+    "voltage", "temperature", "relay", "BalanceCurrent", "SystemCurrent", "balance", "annomaly", "SOH", "SOC"
 ];
 
 const collectionChinesePrompt = {
     "all": "全部數據",
     "voltage": "電壓",
     "temperature": "溫度",
-    "relay": "繼電器",
-    "current": "電流",
-    "balance": "充放電平衡",
+    "relay": "繼電器狀態",
+    "BalanceCurrent": "平衡電流",
+    "SystemCurrent": "系統電流",
+    "balance": "平衡狀態",
     "annomaly": "警報通知",
     "SOH": "電池健康度",
     "SOC": "電池電量"

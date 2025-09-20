@@ -15,10 +15,10 @@ export default function BatteryHealthStatus({ health }) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <FaHeartbeat className={`text-4xl mb-2 ${color}`} />
-      <div className="text-white font-medium">{health}%</div>
-      <div className="text-sm text-white opacity-80">{status}</div>
+    <div className="flex flex-col items-center justify-center p-9">
+      <FaHeartbeat className={`text-5xl mb-2 ${color}`} />
+      <div className="text-white font-bold">{health}%</div>
+      <div className="text-sm text-white font-bold">{status}</div>
     </div>
   );
 }
