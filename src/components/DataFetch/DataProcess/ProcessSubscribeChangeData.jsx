@@ -31,6 +31,22 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
         setErrorMsg("伺服器回傳資料格式不正確！")
         return
     }
+    if(rawData["collection_name"] == "BalanceCurrent"){
+        let time = rawData["timestamp"]
+        let celldata = rawData["rawData"]
+        let BCData = Object.fromEntries(
+            Object.entries(celldata).map(([k, v]) => {
+                const m = k.match(/^cell_(\d+)$/)
+                return m ? [`cell ${Number(m[1]) + 1}`, v] : [k, v]
+            })
+        )
+        time = Date.parse(time)
+        BCData["time"] = time
+        dispatch(addData({
+            "dataType": "BalanceCurrent",
+            "data": BCData
+        }))
+    }
     
     if(DataClassCode == '0'){
         let collection_name = rawData["collection_name"]

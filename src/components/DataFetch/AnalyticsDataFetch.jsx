@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData,
     setCellChargeInfo,
-    setSOHGraphData
+    setSOHGraphData,
+    setBalanceCurrentGraphData
 } from '../../features/RouteData/AnalyticsData'
 import { setIs_Error, setErrMsg } from "../../features/Error/ErrorSlice";
-import { POST_GRATH_DATA, GET_ANALYTICS_DATA } from "../../Public/APIUrl";
+import { POST_GRATH_DATA, GET_ANALYTICS_DATA, POST_BALANCECURRENT_DATA } from "../../Public/APIUrl";
 
 export default function AnalyticsDataFetch() {
     const dispatch = useDispatch()
@@ -25,12 +26,14 @@ export default function AnalyticsDataFetch() {
     const TempTimeScale = graphInfo.Temperature.TimeScale
     const VolTimeScale = graphInfo.Voltage.TimeScale
     const CurrentTimeScale = graphInfo.SystemCurrent.TimeScale
+    const BalanceCurrentTimeScale = graphInfo.BalanceCurrent.TimeScale
     //------ setting graph data functions ------//
     const setSOCData = (data) => dispatch(setSOCGraphData(data))
     const setSOHData = (data) => dispatch(setSOHGraphData(data))
     const setTempData = (data) => dispatch(setTemperatureGraphData(data))
     const setVolData = (data) => dispatch(setVoltageGraphData(data))
     const setSystemCurrentData = (data) => dispatch(setSystemCurrentGraphData(data))
+    const setBalanceCurrentData = (data) => dispatch(setBalanceCurrentGraphData(data))
     //------ srting cell charge info functions ------//
     const setChargingIndexInfo = (data) => dispatch(setCellChargeInfo(data))
     //------ Graph data fetch ------//
@@ -51,7 +54,6 @@ export default function AnalyticsDataFetch() {
                 SystemCurrent: CurrentTimeScale
             }
         }
-        console.log(payload)
         fetch(POST_GRATH_DATA, {
             method: "POST",
             headers: {
@@ -78,7 +80,36 @@ export default function AnalyticsDataFetch() {
                 dispatch(setIs_Error(true))
                 dispatch(setErrMsg("err: 與伺服器連線時發生錯誤"))
             })
-    }, [graphInfo])
+    }, [graphInfo.SOC, graphInfo.SOH, graphInfo.Temperature, graphInfo.Voltage, graphInfo.SystemCurrent])
+    useEffect(() => {
+        const payload = {
+            "Time_Scale": BalanceCurrentTimeScale
+        }
+        fetch(POST_BALANCECURRENT_DATA, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(res => res.json())
+            .then(data => {
+                data = JSON.parse(data)
+                if (data['Status'] != 'Success') {
+                    console.log(data)
+                    dispatch(setIs_Error(true))
+                    dispatch(setErrMsg('抓取Graph資料時發生錯誤！'))
+                    return
+                }
+                console.log(data)
+                setBalanceCurrentData(data["data"])
+            })
+            .catch(err => {
+                console.log(err)
+                dispatch(setIs_Error(true))
+                dispatch(setErrMsg("err: 與伺服器連線時發生錯誤"))
+            })
+    }, [BalanceCurrentTimeScale])
     //------ Other blocks data fetch ------//
     useEffect(() => {
         if (is_MainPage_Rendered) return

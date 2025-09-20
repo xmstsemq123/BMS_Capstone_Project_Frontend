@@ -21,6 +21,10 @@ const AnalyticsData = createSlice({
             },
             SystemCurrent: {
                 TimeScale: '0'
+            },
+            BalanceCurrent: {
+                GraphScale: 'overall',
+                TimeScale: '0'
             }
         },
         graphData: {
@@ -28,7 +32,8 @@ const AnalyticsData = createSlice({
             Temperature: [],
             Voltage: [],
             SystemCurrent: [],
-            SOH: []
+            SOH: [],
+            BalanceCurrent: []
         },
         cellChargeInfo: {
             chargingIndex: 0,
@@ -53,7 +58,12 @@ const AnalyticsData = createSlice({
             state.graphInfo.SystemCurrent.TimeScale = actions.payload.TimeScale
         },
         setSOHGraphInfo: (state, actions) => {
+            state.graphInfo.SOH.GraphScale = actions.payload.GraphScale
             state.graphInfo.SOH.TimeScale = actions.payload.TimeScale
+        },
+        setBalanceCurrentGraphInfo: (state, actions) => {
+            state.graphInfo.BalanceCurrent.GraphScale = actions.payload.GraphScale
+            state.graphInfo.BalanceCurrent.TimeScale = actions.payload.TimeScale
         },
         // setting graph data
         setSOCGraphData: (state, actions) => {
@@ -67,10 +77,12 @@ const AnalyticsData = createSlice({
         },
         setVoltageGraphData: (state, actions) => {
             state.graphData.Voltage = actions.payload
-            console.log(actions.payload)
         },
         setSystemCurrentGraphData: (state, actions) => {
             state.graphData.SystemCurrent = actions.payload
+        },
+        setBalanceCurrentGraphData: (state, actions) => {
+            state.graphData.BalanceCurrent = actions.payload
         },
         // setting cell charge info
         setCellChargeInfo: (state, actions) => {
@@ -92,7 +104,7 @@ const AnalyticsData = createSlice({
 
 export const { setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setSystemCurrentGraphInfo,
     setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData, 
-    setSOHGraphInfo, setSOHGraphData,
+    setSOHGraphInfo, setSOHGraphData, setBalanceCurrentGraphData, setBalanceCurrentGraphInfo,
     setCellChargeInfo,
     addData
  } = AnalyticsData.actions
