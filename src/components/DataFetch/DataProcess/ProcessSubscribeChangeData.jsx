@@ -30,7 +30,6 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
         setErrorMsg("伺服器回傳資料格式不正確！")
         return
     }
-    console.log(rawData)
     if (rawData["collection_name"] == "BalanceCurrent") {
         let time = rawData["timestamp"]
         let celldata = rawData["rawData"]
