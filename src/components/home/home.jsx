@@ -25,7 +25,7 @@ export default function Home() {
   const batteryTemperature = useSelector((state) => state.homeData.temperature)
   const batteryVoltage = useSelector((state) => state.homeData.voltage)
   return (<>
-    <div className="p-6 bg-[#d6d6d6] select-none">
+    <div className="p-6 bg-[#ffffff] select-none">
       <h1 className="text-2xl font-bold text-black mb-6">電池模組狀態總覽</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <Block title="電車狀態">
