@@ -41,7 +41,7 @@ createRoot(document.getElementById('root')).render(
       {/* Nav Bar */}
       <Router>
         <CheckUser />
-        <div className="min-h-screen bg-[#161325] text-white font-sans">
+        <div className="min-h-screen bg-[#d6d6d6] text-black font-sans">
           <Nav />
           <Error className="h-full w-full" />
           <main className="p-6">
