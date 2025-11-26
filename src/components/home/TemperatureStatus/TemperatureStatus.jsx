@@ -21,8 +21,8 @@ export default function TemperatureStatus({ temp }) {
   return (
     <div className="flex flex-col items-center justify-center p-8">
       <FaThermometerHalf className={`text-6xl mb-2 ${color}`} />
-      <div className="text-white font-bold">{temp}°C</div>
-      <div className="text-sm text-white opacity-80 font-bold">{status}</div>
+      <div className=" font-bold">{temp}°C</div>
+      <div className="text-sm  opacity-80 font-bold">{status}</div>
     </div>
   );
 }

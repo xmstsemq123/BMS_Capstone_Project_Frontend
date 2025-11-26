@@ -66,12 +66,12 @@ export default function BatteryAbnormalState() {
             is_normal === true ? (
                 <div className="flex flex-col items-center text-green-400 p-8">
                     <FaCheckCircle className="text-5xl mt-2 mb-5" />
-                    <span className="text-2xl text-white font-bold">電池狀態正常</span>
+                    <span className="text-2xl  font-bold">電池狀態正常</span>
                 </div>
             ) : (
                 <div className={`flex flex-col items-center ${iconColor} p-8`}>
                     <FaExclamationTriangle className="text-6xl mt-1 mb-4 animate-pulse" />
-                    <span className="text-2xl text-white font-bold">電池{healthPrompt}</span>
+                    <span className="text-2xl  font-bold">電池{healthPrompt}</span>
                 </div>
             )
         }
