@@ -8,6 +8,7 @@ import BatteryAbnormalState from './BatteryAbnormalState/BatteryAbnormalState';
 import CellActivityBlock from './CellActivityBlock/CellActivityBlock';
 import BalanceStatus from './BalanceStatus/BalanceStatus';
 import RideStatus from './RideStatus/RideStatus';
+import RelayControlButton from './RelayControlButton/RelayControlbutton';
 
 const Block = ({ title, children, className }) => {
   return (
@@ -28,7 +29,10 @@ export default function Home() {
     <div className="p-6 bg-[#d6d6d6] select-none">
       <h1 className="text-2xl font-bold text-black mb-6">電池模組狀態總覽</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <Block title="電車狀態">
+        <Block title="電車狀態控制" >
+          <RelayControlButton />
+        </Block>
+        <Block title="電車目前狀態">
           <RideStatus />
         </Block>
         <Block title="電量">

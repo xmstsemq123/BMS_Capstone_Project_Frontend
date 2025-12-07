@@ -25,7 +25,7 @@ function StatusChangeToContent(RelayStatus, SystemCurrent) {
   } else {
     return (<>
       <FaPauseCircle className="text-6xl text-gray-300 mb-2" />
-      <span className=" font-bold text-2xl">靜置中</span>
+      <span className=" font-bold text-2xl">怠速中</span>
     </>)
   }
 }
