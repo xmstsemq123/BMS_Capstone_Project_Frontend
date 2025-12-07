@@ -12,12 +12,12 @@ function StatusChangeToContent(RelayStatus, SystemCurrent) {
       <span className=" font-bold text-2xl">尚未發動</span>
     </>)
   }
-  if (SystemCurrent > 0.1) {
+  if (SystemCurrent > 0.5) {
     return (<>
       <FaMotorcycle className="text-6xl  mb-2" />
       <span className=" font-bold text-2xl">騎行中</span>
     </>)
-  } else if (SystemCurrent < -0.1) {
+  } else if (SystemCurrent < -0.5) {
     return (<>
       <PiPlugChargingFill className="text-6xl text-green-500 mb-2" />
       <span className=" font-bold text-2xl">充電中</span>
