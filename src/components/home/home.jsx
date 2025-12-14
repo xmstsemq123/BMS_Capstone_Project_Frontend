@@ -9,6 +9,7 @@ import CellActivityBlock from './CellActivityBlock/CellActivityBlock';
 import BalanceStatus from './BalanceStatus/BalanceStatus';
 import RideStatus from './RideStatus/RideStatus';
 import RelayControlButton from './RelayControlButton/RelayControlbutton';
+import CapacitorStatus from './CapacitorStatus/CapacitorStatus';
 
 const Block = ({ title, children, className }) => {
   return (
@@ -25,6 +26,8 @@ export default function Home() {
   const batteryHealth = useSelector((state) => state.homeData.SOH)
   const batteryTemperature = useSelector((state) => state.homeData.temperature)
   const batteryVoltage = useSelector((state) => state.homeData.voltage)
+  const CapacitorVoltage = useSelector((state) => state.homeData.CapacitorVoltage)
+  const CapacitorCurrent = useSelector((state) => state.homeData.CapacitorCurrent)
   return (<>
     <div className="p-6 bg-[#d6d6d6] select-none">
       <h1 className="text-2xl font-bold text-black mb-6">電池模組狀態總覽</h1>
@@ -49,6 +52,9 @@ export default function Home() {
         </Block>
         <Block title="平衡狀態">
           <BalanceStatus />
+        </Block>
+        <Block title="電車電容狀態">
+          <CapacitorStatus />
         </Block>
       </div>
     </div>

@@ -16,7 +16,7 @@ export default function HomeDataFetch() {
     // fetch home data
     useEffect(() => {
         if (is_MainPage_Rendered) return
-        fetch(GET_NEWEST_MEAN_DATA + "?c=voltage&c=temperature&c=SOC&c=SOH")
+        fetch(GET_NEWEST_MEAN_DATA + "?c=voltage&c=temperature&c=SOC&c=SOH&c=CapacitorCurrent&c=CapacitorVoltage")
             .then(res => res.json())
             .then(data => {
                 data = JSON.parse(data)
@@ -29,12 +29,16 @@ export default function HomeDataFetch() {
                 let temperature_mean_value = data["temperature"]
                 let SOC_mean_value = data["SOC"]
                 let SOH_mean_value = data["SOH"]
+                let CapacitorCurrent_Value = data["CapacitorCurrent"]
+                let CapacitorVoltage_Value = data["CapacitorVoltage"]
                 dispatch(setAllHomeData({
                     voltage: voltage_mean_value,
                     current: 0,
                     temperature: temperature_mean_value,
                     SOC: SOC_mean_value,
-                    SOH: SOH_mean_value
+                    SOH: SOH_mean_value,
+                    CapacitorCurrent: CapacitorCurrent_Value,
+                    CapacitorVoltage: CapacitorVoltage_Value
                 }))
             })
             .catch(err => {

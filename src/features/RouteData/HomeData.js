@@ -7,6 +7,8 @@ const HomeData = createSlice({
         temperature: 30,
         SOC: 95,
         SOH: 95,
+        CapacitorVoltage: 0.0,
+        CapacitorCurrent: 0.0,
         RelayStatus: false,
         SystemCurrent: 0.0,
         BalanceStatus: {},
@@ -20,6 +22,8 @@ const HomeData = createSlice({
             state.temperature = Math.round( payload.temperature*10) / 10
             state.SOC = Math.round( payload.SOC*10) / 10
             state.SOH = Math.round( payload.SOH*10) / 10
+            state.CapacitorCurrent = Math.round( payload.CapacitorCurrent*10) / 10
+            state.CapacitorVoltage = Math.round( payload.CapacitorVoltage*10) / 10
         },
         setVoltage: (state, actions) => {
             state.voltage = Math.round( actions.payload*10) / 10
@@ -47,10 +51,17 @@ const HomeData = createSlice({
         },
         setSystemCurrent: (state, actions) => {
             state.SystemCurrent = actions.payload
+        },
+        setCapacitorVoltage: (state, actions) => {
+            state.CapacitorVoltage = actions.payload
+        },
+        setCapacitorCurrent: (state, actions) => {
+            state.CapacitorCurrent = actions.payload
         }
     }
 })
 export const { setAllHomeData, setVoltage, setCurrent, 
-    setTemperature, setSOC, setSOH, setRelayStatus, setBalanceStatus, setBalanceCurrent, setSystemCurrent
+    setTemperature, setSOC, setSOH, setRelayStatus, setBalanceStatus, setBalanceCurrent, setSystemCurrent,
+    setCapacitorCurrent, setCapacitorVoltage
 } = HomeData.actions
 export default HomeData.reducer

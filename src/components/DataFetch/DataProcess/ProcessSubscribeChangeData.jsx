@@ -1,4 +1,4 @@
-import { setVoltage, setCurrent, setTemperature, setSOC, setSOH, setBalanceCurrent, setBalanceStatus, setSystemCurrent, setRelayStatus } from "../../../features/RouteData/HomeData";
+import { setVoltage, setCurrent, setTemperature, setSOC, setSOH, setBalanceCurrent, setBalanceStatus, setSystemCurrent, setRelayStatus, setCapacitorVoltage, setCapacitorCurrent } from "../../../features/RouteData/HomeData";
 import { setIs_Error, setErrMsg } from "../../../features/Error/ErrorSlice";
 import { addData, setCellChargeInfo, setSystemCurrentGraphData } from "../../../features/RouteData/AnalyticsData";
 import { insertFrontOneHistoryAnnomalyData, setIs_newAnnomalyData, setNewAnnomalyData } from "../../../features/RouteData/AnnomalyData";
@@ -50,39 +50,41 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
 
     if (DataClassCode == '0') {
         let collection_name = rawData["collection_name"]
-        let slice_name = CollectionNameToSliceNameList[collection_name]
-        let timestamp = rawData["timestamp"]
-        if (collection_name == "SystemCurrent") {
-            let dataValue = rawData["data"]
-            if (dataValue) {
-                dispatch(addData({
-                    "dataType": "SystemCurrent",
-                    "data": {
-                        "time": { "$date": timestamp },
-                        "value": dataValue
-                    }
-                }))
-            }
-        } else {
-            if (analyticsData.graphInfo[slice_name].GraphScale == "overall") {
+        if (["SOC", "SOH", "voltage", "SystemCurrent", "temperature"].includes(collection_name)) {
+            let slice_name = CollectionNameToSliceNameList[collection_name]
+            let timestamp = rawData["timestamp"]
+            if (collection_name == "SystemCurrent") {
                 let dataValue = rawData["data"]
-                dispatch(addData({
-                    "dataType": slice_name,
-                    "data": {
-                        "time": { "$date": timestamp },
-                        "value": dataValue
-                    }
-                }))
+                if (dataValue) {
+                    dispatch(addData({
+                        "dataType": "SystemCurrent",
+                        "data": {
+                            "time": { "$date": timestamp },
+                            "value": dataValue
+                        }
+                    }))
+                }
             } else {
-                let chosencell = analyticsData.graphInfo[slice_name].GraphScale
-                let dataValue = rawData["rawData"][`cell_${chosencell}`]
-                dispatch(addData({
-                    "dataType": slice_name,
-                    "data": {
-                        "time": { "$date": timestamp },
-                        "value": dataValue
-                    }
-                }))
+                if (analyticsData.graphInfo[slice_name].GraphScale == "overall") {
+                    let dataValue = rawData["data"]
+                    dispatch(addData({
+                        "dataType": slice_name,
+                        "data": {
+                            "time": { "$date": timestamp },
+                            "value": dataValue
+                        }
+                    }))
+                } else {
+                    let chosencell = analyticsData.graphInfo[slice_name].GraphScale
+                    let dataValue = rawData["rawData"][`cell_${chosencell}`]
+                    dispatch(addData({
+                        "dataType": slice_name,
+                        "data": {
+                            "time": { "$date": timestamp },
+                            "value": dataValue
+                        }
+                    }))
+                }
             }
         }
     }
@@ -143,6 +145,14 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
                 dispatch(setSOH(new_value))
                 break
             }
+            case 'CapacitorVoltage': {
+                dispatch(setCapacitorVoltage(new_value))
+                break
+            }
+            case 'CapacitorCurrent': {
+                dispatch(setCapacitorCurrent(new_value))
+                break
+            }
         }
     }
 
@@ -169,7 +179,7 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
                 "is_dc": is_dc,
                 "Cell": Cell
             }))
-        }else if(collection_name == "relay"){
+        } else if (collection_name == "relay") {
             let RelayStatus = data["rawData"]
             dispatch(setRelayStatus(RelayStatus))
         }
