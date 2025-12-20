@@ -4,7 +4,9 @@ import {
     setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData,
     setCellChargeInfo,
     setSOHGraphData,
-    setBalanceCurrentGraphData
+    setBalanceCurrentGraphData,
+    setCapacitorCurrentGraphData,
+    setCapacitorVoltageGraphData
 } from '../../features/RouteData/AnalyticsData'
 import { setIs_Error, setErrMsg } from "../../features/Error/ErrorSlice";
 import { POST_GRATH_DATA, POST_BALANCECURRENT_DATA } from "../../Public/APIUrl";
@@ -27,6 +29,8 @@ export default function AnalyticsDataFetch() {
     const VolTimeScale = graphInfo.Voltage.TimeScale
     const CurrentTimeScale = graphInfo.SystemCurrent.TimeScale
     const BalanceCurrentTimeScale = graphInfo.BalanceCurrent.TimeScale
+    const CCTimeScale = graphInfo.CapacitorCurrent.TimeScale
+    const CVTimeScale = graphInfo.CapacitorVoltage.TimeScale
     //------ setting graph data functions ------//
     const setSOCData = (data) => dispatch(setSOCGraphData(data))
     const setSOHData = (data) => dispatch(setSOHGraphData(data))
@@ -34,6 +38,8 @@ export default function AnalyticsDataFetch() {
     const setVolData = (data) => dispatch(setVoltageGraphData(data))
     const setSystemCurrentData = (data) => dispatch(setSystemCurrentGraphData(data))
     const setBalanceCurrentData = (data) => dispatch(setBalanceCurrentGraphData(data))
+    const setCapacitorCurrentData = (data) => dispatch(setCapacitorCurrentGraphData(data))
+    const setCapacitorVoltageData = (data) => dispatch(setCapacitorVoltageGraphData(data))
     //------ srting cell charge info functions ------//
     const setChargingIndexInfo = (data) => dispatch(setCellChargeInfo(data))
     //------ Graph data fetch ------//
@@ -44,14 +50,18 @@ export default function AnalyticsDataFetch() {
                 SOH: selectedCellSOH,
                 temperature: selectedTempCell,
                 voltage: selectedVolCell,
-                SystemCurrent: "OneValue"
+                SystemCurrent: "OneValue",
+                CapacitorCurrent: "OneValue",
+                CapacitorVoltage: "OneValue"
             },
             Time_Scale: {
                 SOC: SOCTimeScale,
                 SOH: SOHTimeScale,
                 temperature: TempTimeScale,
                 voltage: VolTimeScale,
-                SystemCurrent: CurrentTimeScale
+                SystemCurrent: CurrentTimeScale,
+                CapacitorCurrent: CCTimeScale,
+                CapacitorVoltage: CVTimeScale
             }
         }
         fetch(POST_GRATH_DATA, {
@@ -75,12 +85,15 @@ export default function AnalyticsDataFetch() {
                 setVolData(data["voltage"])
                 setSystemCurrentData(data["SystemCurrent"])
                 setSOHData(data["SOH"])
+                console.log(data)
+                setCapacitorCurrentData(data["CapacitorCurrent"])
+                setCapacitorVoltageData(data["CapacitorVoltage"])
             })
             .catch(err => {
                 dispatch(setIs_Error(true))
                 dispatch(setErrMsg("err: 與伺服器連線時發生錯誤"))
             })
-    }, [graphInfo.SOC, graphInfo.SOH, graphInfo.Temperature, graphInfo.Voltage, graphInfo.SystemCurrent])
+    }, [graphInfo.SOC, graphInfo.SOH, graphInfo.Temperature, graphInfo.Voltage, graphInfo.SystemCurrent, graphInfo.CapacitorCurrent, graphInfo.CapacitorVoltage])
     useEffect(() => {
         const payload = {
             "Time_Scale": BalanceCurrentTimeScale

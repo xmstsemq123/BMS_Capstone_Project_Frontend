@@ -17,7 +17,9 @@ const CollectionNameToSliceNameList = {
     "SOH": "SOH",
     "voltage": "Voltage",
     "SystemCurrent": "SystemCurrent",
-    "temperature": "Temperature"
+    "temperature": "Temperature",
+    "CapacitorCurrent": "CapacitorCurrent",
+    "CapacitorVoltage": "CapacitorVoltage"
 }
 export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNotificationPermission, analyticsData) {
     const setErrorMsg = (data) => {
@@ -50,14 +52,14 @@ export default function ProcessSubscribeChangeData(rawData, dispatch, DesktopNot
 
     if (DataClassCode == '0') {
         let collection_name = rawData["collection_name"]
-        if (["SOC", "SOH", "voltage", "SystemCurrent", "temperature"].includes(collection_name)) {
+        if (["SOC", "SOH", "voltage", "SystemCurrent", "temperature", "CapacitorCurrent", "CapacitorVoltage"].includes(collection_name)) {
             let slice_name = CollectionNameToSliceNameList[collection_name]
             let timestamp = rawData["timestamp"]
-            if (collection_name == "SystemCurrent") {
+            if (["SystemCurrent", "CapacitorCurrent", "CapacitorVoltage"].includes(collection_name)) {
                 let dataValue = rawData["data"]
                 if (dataValue) {
                     dispatch(addData({
-                        "dataType": "SystemCurrent",
+                        "dataType": collection_name,
                         "data": {
                             "time": { "$date": timestamp },
                             "value": dataValue

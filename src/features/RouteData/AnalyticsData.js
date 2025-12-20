@@ -25,6 +25,12 @@ const AnalyticsData = createSlice({
             BalanceCurrent: {
                 GraphScale: 'overall',
                 TimeScale: '0'
+            },
+            CapacitorCurrent: {
+                TimeScale: '0'
+            },
+            CapacitorVoltage: {
+                TimeScale: '0'
             }
         },
         graphData: {
@@ -33,7 +39,9 @@ const AnalyticsData = createSlice({
             Voltage: [],
             SystemCurrent: [],
             SOH: [],
-            BalanceCurrent: []
+            BalanceCurrent: [],
+            CapacitorCurrent: [],
+            CapacitorVoltage: []
         },
         cellChargeInfo: {
             chargingIndex: 0,
@@ -65,6 +73,12 @@ const AnalyticsData = createSlice({
             state.graphInfo.BalanceCurrent.GraphScale = actions.payload.GraphScale
             state.graphInfo.BalanceCurrent.TimeScale = actions.payload.TimeScale
         },
+        setCapacitorCurrentGraphInfo: (state, actions) => {
+            state.graphInfo.CapacitorCurrent.TimeScale = actions.payload.TimeScale
+        },
+        setCapacitorVoltageGraphInfo: (state, actions) => {
+            state.graphInfo.CapacitorVoltage.TimeScale = actions.payload.TimeScale
+        },
         // setting graph data
         setSOCGraphData: (state, actions) => {
             state.graphData.SOC = actions.payload
@@ -83,6 +97,12 @@ const AnalyticsData = createSlice({
         },
         setBalanceCurrentGraphData: (state, actions) => {
             state.graphData.BalanceCurrent = actions.payload
+        },
+        setCapacitorCurrentGraphData: (state, actions) => {
+            state.graphData.CapacitorCurrent = actions.payload
+        },
+        setCapacitorVoltageGraphData: (state, actions) => {
+            state.graphData.CapacitorVoltage = actions.payload
         },
         // setting cell charge info
         setCellChargeInfo: (state, actions) => {
@@ -106,6 +126,7 @@ export const { setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, se
     setSOCGraphData, setTemperatureGraphData, setVoltageGraphData, setSystemCurrentGraphData, 
     setSOHGraphInfo, setSOHGraphData, setBalanceCurrentGraphData, setBalanceCurrentGraphInfo,
     setCellChargeInfo,
+    setCapacitorCurrentGraphInfo, setCapacitorVoltageGraphInfo, setCapacitorCurrentGraphData, setCapacitorVoltageGraphData,
     addData
  } = AnalyticsData.actions
 export default AnalyticsData.reducer

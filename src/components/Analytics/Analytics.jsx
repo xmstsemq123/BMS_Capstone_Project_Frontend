@@ -6,7 +6,9 @@ import {
     setSOCGraphInfo, setTemperatureGraphInfo, setVoltageGraphInfo, setSystemCurrentGraphInfo,
     setSOHGraphInfo,
     setBalanceCurrentGraphData,
-    setBalanceCurrentGraphInfo
+    setBalanceCurrentGraphInfo,
+    setCapacitorCurrentGraphInfo,
+    setCapacitorVoltageGraphInfo
 } from '../../features/RouteData/AnalyticsData'
 import { FaBatteryFull, FaBatteryQuarter } from 'react-icons/fa';
 import CustomSelect from './CustomSelect/CustomSelect';
@@ -55,6 +57,8 @@ export default function Analytics() {
     const VolTimeScale = graphInfo.Voltage.TimeScale
     const SystemCurrentTimeScale = graphInfo.SystemCurrent.TimeScale
     const BCTimeScale = graphInfo.BalanceCurrent.TimeScale
+    const CCTimeScale = graphInfo.CapacitorCurrent.TimeScale
+    const CVTimeScale = graphInfo.CapacitorVoltage.TimeScale
     //------ graph info functions ------//
     //--- graph scale ---//
     const setSelectedCellSOC = (data) => dispatch(setSOCGraphInfo({ GraphScale: data, TimeScale: SOCTimeScale }))
@@ -69,6 +73,8 @@ export default function Analytics() {
     const setVolTimeScale = (data) => dispatch(setVoltageGraphInfo({ GraphScale: selectedVolCell, TimeScale: data }))
     const setSystemCurrentTimeScale = (data) => dispatch(setSystemCurrentGraphInfo({ TimeScale: data }))
     const setBCTimeScale = (data) => dispatch(setBalanceCurrentGraphInfo({ GraphScale: selectedBCCell, TimeScale: data }))
+    const setCapacitorCurrentTimeScale = (data) => dispatch(setCapacitorCurrentGraphInfo({ TimeScale: data }))
+    const setCapacitorVoltageTimeScale = (data) => dispatch(setCapacitorVoltageGraphInfo({ TimeScale: data }))
     //------ graph data ------//
     const SOCData = graphData.SOC
     const SOHData = graphData.SOH
@@ -76,8 +82,24 @@ export default function Analytics() {
     const VolData = graphData.Voltage
     const SystemCurrentData = graphData.SystemCurrent
     const BalanceCurrentData = graphData.BalanceCurrent
+    const CapacitorCurrentData = graphData.CapacitorCurrent
+    const CapacitorVoltageData = graphData.CapacitorVoltage
     //------ Array for quick layout ------//
     const chargeCompnents = [
+        {
+            is_cell: false,
+            title: '負載端超級電容電壓紀錄',
+            timeScaleValue: CCTimeScale,
+            timeScaleFunction: setCapacitorCurrentTimeScale,
+            data: CapacitorCurrentData
+        },
+        {
+            is_cell: false,
+            title: '負載端超級電容電流紀錄',
+            timeScaleValue: CVTimeScale,
+            timeScaleFunction: setCapacitorVoltageTimeScale,
+            data: CapacitorVoltageData
+        },
         {
             is_cell: true,
             title: '歷史電壓紀錄',
