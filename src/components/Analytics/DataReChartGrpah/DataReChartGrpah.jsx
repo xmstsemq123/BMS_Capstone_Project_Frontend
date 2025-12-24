@@ -104,10 +104,34 @@ export default function VoltageHistoryFigure({ data }) {
   });
 
   // 首次資料到位時初始化 range
+  // useEffect(() => {
+  //   if (!hasData) return;
+  //   setRange([baseData[0].time, baseData[baseData.length - 1].time]);
+  // }, [hasData, baseData]);
+
+  //------ 新增內容防止時間軸bar跳動(下) ------//
+  // 用 ref 紀錄是否已經初始化過範圍
+  const isInitializedRef = useRef(false);
+
+  // 當數據變空時（例如切換設備），重置初始化狀態 (選擇性功能，視需求而定)
+  useEffect(() => {
+    if (!hasData) {
+      isInitializedRef.current = false;
+    }
+  }, [hasData]);
+
+  // 首次資料到位時初始化 range，之後資料更新不再重置
   useEffect(() => {
     if (!hasData) return;
-    setRange([baseData[0].time, baseData[baseData.length - 1].time]);
+
+    // 只有在「尚未初始化」時才設定全範圍
+    if (!isInitializedRef.current) {
+      setRange([baseData[0].time, baseData[baseData.length - 1].time]);
+      isInitializedRef.current = true;
+    }
+    // 如果已經初始化過，就保留原本的 range，不做任何動作
   }, [hasData, baseData]);
+  //------ 新增內容防止時間軸bar跳動(上) ------//
 
   // RWD 調整 margin
   useEffect(() => {
